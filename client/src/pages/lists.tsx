@@ -28,6 +28,32 @@ export default function Lists() {
     queryKey: ["/api/lists"],
   });
 
+  // Query to get contact counts for all lists
+  const { data: listContactCounts = {} } = useQuery({
+    queryKey: ["/api/lists/contact-counts"],
+    queryFn: async () => {
+      if (!lists.length) return {};
+      const counts: Record<number, number> = {};
+      await Promise.all(
+        lists.map(async (list) => {
+          try {
+            const response = await fetch(`/api/lists/${list.id}/contacts`);
+            if (response.ok) {
+              const contacts = await response.json();
+              counts[list.id] = contacts.length;
+            } else {
+              counts[list.id] = 0;
+            }
+          } catch {
+            counts[list.id] = 0;
+          }
+        })
+      );
+      return counts;
+    },
+    enabled: lists.length > 0,
+  });
+
   const { data: selectedListContacts = [] } = useQuery<Contact[]>({
     queryKey: [`/api/lists/${selectedListForEmail?.id}/contacts`],
     enabled: !!selectedListForEmail?.id,
@@ -238,7 +264,7 @@ export default function Lists() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2 text-sm text-slate-600">
                       <Users className="w-4 h-4" />
-                      <span>0 contacts</span>
+                      <span>{listContactCounts[list.id] || 0} contacts</span>
                     </div>
                     <div className="flex space-x-2">
                       <Button 
