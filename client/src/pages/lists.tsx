@@ -150,31 +150,66 @@ export default function Lists() {
 
   if (isLoading) {
     return (
-      <div className="p-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="animate-pulse space-y-4">
-            <div className="h-8 bg-slate-200 rounded w-48"></div>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="h-32 bg-slate-200 rounded"></div>
-              ))}
+      <>
+        {/* Mobile Header */}
+        <div className="bg-white border-b border-slate-200 px-4 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center">
+                <Users className="w-4 h-4 text-white" />
+              </div>
+              <div>
+                <h1 className="font-semibold text-slate-800">Design CRM</h1>
+                <p className="text-sm text-slate-600">Loading...</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+
+        <main className="pb-20">
+          <div className="px-4 py-4">
+            <div className="animate-pulse space-y-4">
+              <div className="h-8 bg-slate-200 rounded w-48"></div>
+              <div className="grid gap-4">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="h-32 bg-slate-200 rounded"></div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </main>
+        
+        <BottomNavigation />
+      </>
     );
   }
 
   return (
-    <div className="p-4">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-2xl font-bold text-slate-800">Designer Lists</h1>
-            <p className="text-slate-600">Organize and manage curated lists of design talent</p>
+    <>
+      {/* Mobile Header */}
+      <div className="bg-white border-b border-slate-200 px-4 py-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center">
+              <Users className="w-4 h-4 text-white" />
+            </div>
+            <div>
+              <h1 className="font-semibold text-slate-800">Design CRM</h1>
+              <p className="text-sm text-slate-600">{(lists as List[]).length} lists</p>
+            </div>
           </div>
-          
-          <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+        </div>
+      </div>
+
+      <main className="pb-20">
+        <div className="px-4 py-4">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-xl font-bold text-slate-800">Designer Lists</h2>
+              <p className="text-slate-600">Organize and manage curated lists of design talent</p>
+            </div>
+            
+            <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
             <DialogTrigger asChild>
               <Button className="flex items-center space-x-2">
                 <Plus className="w-4 h-4" />
@@ -288,7 +323,9 @@ export default function Lists() {
             ))}
           </div>
         )}
-      </div>
+        </div>
+      </main>
+      
       <BottomNavigation />
       
       {selectedListForEmail && (
@@ -304,6 +341,6 @@ export default function Lists() {
           }}
         />
       )}
-    </div>
+    </>
   );
 }
