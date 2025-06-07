@@ -111,6 +111,111 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // List routes
+  app.get("/api/lists", isAuthenticated, async (req, res) => {
+    try {
+      const lists = await storage.getLists();
+      res.json(lists);
+    } catch (error) {
+      console.error("Error fetching lists:", error);
+      res.status(500).json({ message: "Failed to fetch lists" });
+    }
+  });
+
+  app.post("/api/lists", isAuthenticated, async (req, res) => {
+    try {
+      const validatedData = insertListSchema.parse(req.body);
+      const list = await storage.createList(validatedData);
+      res.status(201).json(list);
+    } catch (error) {
+      console.error("Error creating list:", error);
+      res.status(400).json({ message: "Invalid list data" });
+    }
+  });
+
+  app.get("/api/lists/:id", isAuthenticated, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const list = await storage.getList(id);
+      if (!list) {
+        return res.status(404).json({ message: "List not found" });
+      }
+      res.json(list);
+    } catch (error) {
+      console.error("Error fetching list:", error);
+      res.status(500).json({ message: "Failed to fetch list" });
+    }
+  });
+
+  app.put("/api/lists/:id", isAuthenticated, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const validatedData = insertListSchema.parse(req.body);
+      const list = await storage.updateList(id, validatedData);
+      if (!list) {
+        return res.status(404).json({ message: "List not found" });
+      }
+      res.json(list);
+    } catch (error) {
+      console.error("Error updating list:", error);
+      res.status(400).json({ message: "Invalid list data" });
+    }
+  });
+
+  app.delete("/api/lists/:id", isAuthenticated, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const success = await storage.deleteList(id);
+      if (!success) {
+        return res.status(404).json({ message: "List not found" });
+      }
+      res.json({ message: "List deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting list:", error);
+      res.status(500).json({ message: "Failed to delete list" });
+    }
+  });
+
+  // List contact routes
+  app.get("/api/lists/:id/contacts", isAuthenticated, async (req, res) => {
+    try {
+      const listId = parseInt(req.params.id);
+      const contacts = await storage.getListContacts(listId);
+      res.json(contacts);
+    } catch (error) {
+      console.error("Error fetching list contacts:", error);
+      res.status(500).json({ message: "Failed to fetch list contacts" });
+    }
+  });
+
+  app.post("/api/lists/:id/contacts", isAuthenticated, async (req, res) => {
+    try {
+      const listId = parseInt(req.params.id);
+      const { contactId } = req.body;
+      const validatedData = insertListContactSchema.parse({ listId, contactId });
+      const listContact = await storage.addContactToList(validatedData);
+      res.status(201).json(listContact);
+    } catch (error) {
+      console.error("Error adding contact to list:", error);
+      res.status(400).json({ message: "Invalid data" });
+    }
+  });
+
+  app.delete("/api/lists/:listId/contacts/:contactId", isAuthenticated, async (req, res) => {
+    try {
+      const listId = parseInt(req.params.listId);
+      const contactId = parseInt(req.params.contactId);
+      const success = await storage.removeContactFromList(listId, contactId);
+      if (!success) {
+        return res.status(404).json({ message: "Contact not found in list" });
+      }
+      res.json({ message: "Contact removed from list successfully" });
+    } catch (error) {
+      console.error("Error removing contact from list:", error);
+      res.status(500).json({ message: "Failed to remove contact from list" });
+    }
+  });
+
   // Send email with selected contacts (protected)
   app.post("/api/send-email", isAuthenticated, async (req, res) => {
     try {
