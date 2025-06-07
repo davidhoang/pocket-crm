@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertContactSchema, type Contact } from "@shared/schema";
+import { insertContactSchema, insertListSchema, insertListContactSchema, type Contact } from "@shared/schema";
 import { sendEmail } from "./sendgrid";
 import { setupAuth, isAuthenticated } from "./replitAuth";
 
