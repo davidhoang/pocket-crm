@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { useAuth } from "@/hooks/useAuth";
 import Home from "@/pages/home";
 import Lists from "@/pages/lists";
+import ListDetail from "@/pages/list-detail";
 import Landing from "@/pages/landing";
 import NotFound from "@/pages/not-found";
 
@@ -20,6 +21,7 @@ function Router() {
         <>
           <Route path="/" component={Home} />
           <Route path="/lists" component={Lists} />
+          <Route path="/lists/:id" component={ListDetail} />
         </>
       )}
       <Route component={NotFound} />
