@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Checkbox } from "@/components/ui/checkbox";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ArrowLeft, Plus, Mail, Trash2, Users } from "lucide-react";
+import BottomNavigation from "@/components/bottom-navigation";
 
 export default function ListDetail() {
   const { id } = useParams();
@@ -342,6 +343,7 @@ export default function ListDetail() {
           </div>
         )}
       </div>
+      <BottomNavigation />
     </div>
   );
 }
