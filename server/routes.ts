@@ -3,10 +3,25 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertContactSchema, type Contact } from "@shared/schema";
 import { sendEmail } from "./sendgrid";
+import { setupAuth, isAuthenticated } from "./replitAuth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Get all contacts
-  app.get("/api/contacts", async (req, res) => {
+  // Auth middleware
+  await setupAuth(app);
+
+  // Auth routes
+  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      res.json(user);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      res.status(500).json({ message: "Failed to fetch user" });
+    }
+  });
+  // Get all contacts (protected)
+  app.get("/api/contacts", isAuthenticated, async (req, res) => {
     try {
       const contacts = await storage.getContacts();
       res.json(contacts);
@@ -15,8 +30,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Search contacts
-  app.get("/api/contacts/search", async (req, res) => {
+  // Search contacts (protected)
+  app.get("/api/contacts/search", isAuthenticated, async (req, res) => {
     try {
       const query = req.query.q as string;
       if (!query) {
@@ -30,8 +45,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get single contact
-  app.get("/api/contacts/:id", async (req, res) => {
+  // Get single contact (protected)
+  app.get("/api/contacts/:id", isAuthenticated, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       const contact = await storage.getContact(id);
@@ -46,8 +61,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Create contact
-  app.post("/api/contacts", async (req, res) => {
+  // Create contact (protected)
+  app.post("/api/contacts", isAuthenticated, async (req, res) => {
     try {
       const validatedData = insertContactSchema.parse(req.body);
       const contact = await storage.createContact(validatedData);
@@ -60,8 +75,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Update contact
-  app.put("/api/contacts/:id", async (req, res) => {
+  // Update contact (protected)
+  app.put("/api/contacts/:id", isAuthenticated, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       const validatedData = insertContactSchema.partial().parse(req.body);
@@ -80,8 +95,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Delete contact
-  app.delete("/api/contacts/:id", async (req, res) => {
+  // Delete contact (protected)
+  app.delete("/api/contacts/:id", isAuthenticated, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       const deleted = await storage.deleteContact(id);
@@ -96,8 +111,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Send email with selected contacts
-  app.post("/api/send-email", async (req, res) => {
+  // Send email with selected contacts (protected)
+  app.post("/api/send-email", isAuthenticated, async (req, res) => {
     try {
       const { to, subject, message, contactIds, from } = req.body;
       
