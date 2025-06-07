@@ -150,7 +150,7 @@ export default function Lists() {
 
   if (isLoading) {
     return (
-      <>
+      <div className="min-h-screen max-w-md mx-auto bg-white shadow-xl relative">
         {/* Mobile Header */}
         <div className="bg-white border-b border-slate-200 px-4 py-3">
           <div className="flex items-center justify-between">
@@ -166,11 +166,11 @@ export default function Lists() {
           </div>
         </div>
 
-        <main className="pb-20 bg-gray-50 min-h-screen">
+        <main className="pb-20">
           <div className="px-4 py-4">
             <div className="animate-pulse space-y-4">
               <div className="h-8 bg-slate-200 rounded w-48"></div>
-              <div className="grid gap-4">
+              <div className="space-y-3">
                 {[1, 2, 3].map((i) => (
                   <div key={i} className="h-32 bg-slate-200 rounded"></div>
                 ))}
@@ -180,12 +180,12 @@ export default function Lists() {
         </main>
         
         <BottomNavigation />
-      </>
+      </div>
     );
   }
 
   return (
-    <>
+    <div className="min-h-screen max-w-md mx-auto bg-white shadow-xl relative">
       {/* Mobile Header */}
       <div className="bg-white border-b border-slate-200 px-4 py-3">
         <div className="flex items-center justify-between">
@@ -201,7 +201,7 @@ export default function Lists() {
         </div>
       </div>
 
-      <main className="pb-20 bg-gray-50 min-h-screen">
+      <main className="pb-20">
         <div className="px-4 py-4">
           <div className="flex items-center justify-between mb-6">
             <div className="flex-1 min-w-0">
@@ -343,6 +343,6 @@ export default function Lists() {
           }}
         />
       )}
-    </>
+    </div>
   );
 }
