@@ -4,7 +4,7 @@ import cityImage from "@assets/visualelectric-1748444163530_1749336891397.png";
 
 export default function Landing() {
   return (
-    <div className="min-h-screen max-w-md mx-auto bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col justify-center items-center p-6">
+    <div className="min-h-screen max-w-md mx-auto bg-gray-100 flex flex-col justify-center items-center p-6">
       {/* Hero Image */}
       <div className="w-full mb-6">
         <img 
@@ -13,12 +13,8 @@ export default function Landing() {
           className="w-full h-32 object-cover rounded-lg shadow-lg"
         />
       </div>
-      
       <div className="text-center space-y-8">
         <div className="space-y-4">
-          <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto">
-            <Users className="w-10 h-10 text-white" />
-          </div>
           <h1 className="text-3xl font-bold text-slate-800">Pocket CRM</h1>
           <p className="text-slate-800 text-lg">
             Tracking design talent on your mobile device.
@@ -69,11 +65,9 @@ export default function Landing() {
           <div className="space-y-3">
             <Button
               size="lg"
-              className="w-full bg-primary hover:bg-blue-700 text-white"
+              className="w-full hover:bg-blue-700 text-white bg-[#333]"
               onClick={() => (window.location.href = "/api/login")}
-            >
-              Sign In to Continue
-            </Button>
+            >Sign in</Button>
             <p className="text-xs text-slate-500 text-center">
               Secure authentication powered by Replit
             </p>
