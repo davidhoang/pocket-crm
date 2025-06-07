@@ -81,25 +81,73 @@ export default function AddContactModal({ open, onOpenChange, onSuccess }: AddCo
     },
   });
 
-  const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const compressImage = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+      
+      img.onload = () => {
+        // Calculate new dimensions (max 400px on longest side)
+        const maxSize = 400;
+        let { width, height } = img;
+        
+        if (width > height) {
+          if (width > maxSize) {
+            height = (height * maxSize) / width;
+            width = maxSize;
+          }
+        } else {
+          if (height > maxSize) {
+            width = (width * maxSize) / height;
+            height = maxSize;
+          }
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        
+        // Draw and compress
+        ctx?.drawImage(img, 0, 0, width, height);
+        
+        // Convert to base64 with compression (0.8 quality)
+        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.8);
+        resolve(compressedBase64);
+      };
+      
+      img.onerror = reject;
+      img.src = URL.createObjectURL(file);
+    });
+  };
+
+  const handlePhotoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      if (file.size > 2 * 1024 * 1024) { // 2MB limit
+      if (file.size > 10 * 1024 * 1024) { // 10MB limit before compression
         toast({
           title: "File too large",
-          description: "Please select an image smaller than 2MB.",
+          description: "Please select an image smaller than 10MB.",
           variant: "destructive",
         });
         return;
       }
 
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64String = reader.result as string;
-        setPhotoPreview(base64String);
-        form.setValue("profilePhoto", base64String);
-      };
-      reader.readAsDataURL(file);
+      try {
+        const compressedBase64 = await compressImage(file);
+        setPhotoPreview(compressedBase64);
+        form.setValue("profilePhoto", compressedBase64);
+        
+        toast({
+          title: "Photo uploaded",
+          description: "Image has been compressed and optimized.",
+        });
+      } catch (error) {
+        toast({
+          title: "Upload failed",
+          description: "Could not process the image. Please try another photo.",
+          variant: "destructive",
+        });
+      }
     }
   };
 
