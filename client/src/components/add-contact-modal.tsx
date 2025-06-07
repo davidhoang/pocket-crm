@@ -42,6 +42,7 @@ export default function AddContactModal({ open, onOpenChange, onSuccess }: AddCo
       linkedin: "",
       portfolio: "",
       notes: "",
+      profilePhoto: "",
     },
   });
 
@@ -166,6 +167,20 @@ export default function AddContactModal({ open, onOpenChange, onSuccess }: AddCo
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Portfolio URL</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="url" placeholder="https://..." />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="profilePhoto"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Profile Photo URL</FormLabel>
                   <FormControl>
                     <Input {...field} type="url" placeholder="https://..." />
                   </FormControl>

@@ -43,6 +43,7 @@ export const contacts = pgTable("contacts", {
   linkedin: text("linkedin"),
   portfolio: text("portfolio"),
   notes: text("notes"),
+  profilePhoto: text("profile_photo"),
 });
 
 export type UpsertUser = typeof users.$inferInsert;
