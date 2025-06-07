@@ -274,57 +274,57 @@ export default function Lists() {
             ) : (
               <div className="space-y-3">
                 {(lists as List[]).map((list: List) => (
-              <Card key={list.id} className="hover:shadow-md transition-shadow">
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1 min-w-0">
-                      <CardTitle className="text-lg leading-tight pr-2">{list.name}</CardTitle>
-                      {list.description && (
-                        <CardDescription className="mt-1 text-sm line-clamp-2">
-                          {list.description}
-                        </CardDescription>
-                      )}
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleDeleteList(list.id)}
-                      className="text-slate-400 hover:text-red-600 p-1 shrink-0"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2 text-sm text-slate-600">
-                      <Users className="w-4 h-4" />
-                      <span>{listContactCounts[list.id] || 0} contacts</span>
-                    </div>
-                    <div className="flex space-x-2">
-                      <Button 
-                        size="sm" 
-                        variant="outline"
-                        onClick={() => setLocation(`/lists/${list.id}`)}
-                        className="text-xs px-3"
-                      >
-                        View
-                      </Button>
-                      <Button 
-                        size="sm"
-                        onClick={() => handleSendList(list)}
-                        className="text-xs px-3"
-                      >
-                        <Mail className="w-3 h-3 mr-1" />
-                        Send
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        )}
+                  <Card key={list.id} className="hover:shadow-md transition-shadow">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1 min-w-0">
+                          <CardTitle className="text-lg leading-tight pr-2">{list.name}</CardTitle>
+                          {list.description && (
+                            <CardDescription className="mt-1 text-sm line-clamp-2">
+                              {list.description}
+                            </CardDescription>
+                          )}
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDeleteList(list.id)}
+                          className="text-slate-400 hover:text-red-600 p-1 shrink-0"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="pt-0">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2 text-sm text-slate-600">
+                          <Users className="w-4 h-4" />
+                          <span>{listContactCounts[list.id] || 0} contacts</span>
+                        </div>
+                        <div className="flex space-x-2">
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => setLocation(`/lists/${list.id}`)}
+                            className="text-xs px-3"
+                          >
+                            View
+                          </Button>
+                          <Button 
+                            size="sm"
+                            onClick={() => handleSendList(list)}
+                            className="text-xs px-3"
+                          >
+                            <Mail className="w-3 h-3 mr-1" />
+                            Send
+                          </Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
         </div>
       </main>
       
