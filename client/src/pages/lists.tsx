@@ -202,22 +202,21 @@ export default function Lists() {
       </div>
 
       <main className="pb-20 bg-gray-50 min-h-screen">
-        <div className="max-w-md mx-auto">
-          <div className="px-4 py-4">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-xl font-bold text-slate-800">Designer Lists</h2>
-                <p className="text-slate-600">Organize and manage curated lists of design talent</p>
-              </div>
-              
-              <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button className="flex items-center space-x-2">
-                    <Plus className="w-4 h-4" />
-                    <span>New List</span>
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
+        <div className="px-4 py-4">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex-1 min-w-0">
+              <h2 className="text-xl font-bold text-slate-800">Designer Lists</h2>
+              <p className="text-slate-600 text-sm">Organize and manage curated lists of design talent</p>
+            </div>
+            
+            <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+              <DialogTrigger asChild>
+                <Button className="flex items-center space-x-2 shrink-0 ml-3">
+                  <Plus className="w-4 h-4" />
+                  <span className="hidden sm:inline">New List</span>
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
                   <DialogHeader>
                     <DialogTitle>Create New List</DialogTitle>
                   </DialogHeader>
@@ -262,26 +261,26 @@ export default function Lists() {
               </Dialog>
             </div>
 
-        {(lists as List[]).length === 0 ? (
-          <div className="text-center py-12">
-            <Users className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-slate-600 mb-2">No lists yet</h3>
-            <p className="text-slate-500 mb-4">Create your first curated list of designers</p>
-            <Button onClick={() => setIsCreateDialogOpen(true)}>
-              <Plus className="w-4 h-4 mr-2" />
-              Create Your First List
-            </Button>
-          </div>
-        ) : (
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {(lists as List[]).map((list: List) => (
+            {(lists as List[]).length === 0 ? (
+              <div className="text-center py-12">
+                <Users className="w-12 h-12 text-slate-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-slate-600 mb-2">No lists yet</h3>
+                <p className="text-slate-500 mb-4">Create your first curated list of designers</p>
+                <Button onClick={() => setIsCreateDialogOpen(true)}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Create Your First List
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {(lists as List[]).map((list: List) => (
               <Card key={list.id} className="hover:shadow-md transition-shadow">
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <CardTitle className="text-lg line-clamp-2">{list.name}</CardTitle>
+                    <div className="flex-1 min-w-0">
+                      <CardTitle className="text-lg leading-tight pr-2">{list.name}</CardTitle>
                       {list.description && (
-                        <CardDescription className="mt-2 line-clamp-2">
+                        <CardDescription className="mt-1 text-sm line-clamp-2">
                           {list.description}
                         </CardDescription>
                       )}
@@ -290,13 +289,13 @@ export default function Lists() {
                       variant="ghost"
                       size="sm"
                       onClick={() => handleDeleteList(list.id)}
-                      className="text-slate-400 hover:text-red-600 p-1"
+                      className="text-slate-400 hover:text-red-600 p-1 shrink-0"
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-0">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2 text-sm text-slate-600">
                       <Users className="w-4 h-4" />
@@ -307,14 +306,16 @@ export default function Lists() {
                         size="sm" 
                         variant="outline"
                         onClick={() => setLocation(`/lists/${list.id}`)}
+                        className="text-xs px-3"
                       >
                         View
                       </Button>
                       <Button 
                         size="sm"
                         onClick={() => handleSendList(list)}
+                        className="text-xs px-3"
                       >
-                        <Mail className="w-4 h-4 mr-1" />
+                        <Mail className="w-3 h-3 mr-1" />
                         Send
                       </Button>
                     </div>
@@ -324,7 +325,6 @@ export default function Lists() {
             ))}
           </div>
         )}
-          </div>
         </div>
       </main>
       
