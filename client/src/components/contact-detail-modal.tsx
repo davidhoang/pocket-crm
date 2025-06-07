@@ -140,7 +140,7 @@ export default function ContactDetailModal({
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => window.open(contact.linkedin?.startsWith('http') ? contact.linkedin : `https://${contact.linkedin}`, '_blank')}
+                    onClick={() => contact.linkedin && window.open(contact.linkedin.startsWith('http') ? contact.linkedin : `https://${contact.linkedin}`, '_blank')}
                     className="text-blue-600 hover:text-blue-700"
                   >
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -164,7 +164,7 @@ export default function ContactDetailModal({
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => window.open(contact.portfolio.startsWith('http') ? contact.portfolio : `https://${contact.portfolio}`, '_blank')}
+                    onClick={() => contact.portfolio && window.open(contact.portfolio.startsWith('http') ? contact.portfolio : `https://${contact.portfolio}`, '_blank')}
                     className="text-purple-600 hover:text-purple-700"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

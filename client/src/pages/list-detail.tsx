@@ -137,9 +137,14 @@ export default function ListDetail() {
     addContactsToListMutation.mutate(selectedContactIds);
   };
 
+  const handleContactRefetch = () => {
+    queryClient.invalidateQueries({ queryKey: [`/api/lists/${listId}/contacts`] });
+    queryClient.invalidateQueries({ queryKey: ["/api/contacts"] });
+  };
+
   if (listLoading) {
     return (
-      <>
+      <div className="min-h-screen max-w-md mx-auto bg-white shadow-xl relative">
         {/* Mobile Header */}
         <div className="bg-white border-b border-slate-200 px-4 py-3">
           <div className="flex items-center justify-between">
@@ -155,7 +160,7 @@ export default function ListDetail() {
           </div>
         </div>
 
-        <main className="pb-20 bg-gray-50 min-h-screen">
+        <main className="pb-20">
           <div className="px-4 py-4">
             <div className="animate-pulse space-y-4">
               <div className="h-8 bg-slate-200 rounded w-48"></div>
@@ -165,13 +170,13 @@ export default function ListDetail() {
         </main>
         
         <BottomNavigation />
-      </>
+      </div>
     );
   }
 
   if (!list) {
     return (
-      <>
+      <div className="min-h-screen max-w-md mx-auto bg-white shadow-xl relative">
         {/* Mobile Header */}
         <div className="bg-white border-b border-slate-200 px-4 py-3">
           <div className="flex items-center justify-between">
@@ -187,7 +192,7 @@ export default function ListDetail() {
           </div>
         </div>
 
-        <main className="pb-20 bg-gray-50 min-h-screen">
+        <main className="pb-20">
           <div className="px-4 py-4 text-center py-12">
             <h2 className="text-xl font-semibold text-slate-600">List not found</h2>
             <Button onClick={() => setLocation("/lists")} className="mt-4">
@@ -197,7 +202,7 @@ export default function ListDetail() {
         </main>
         
         <BottomNavigation />
-      </>
+      </div>
     );
   }
 
@@ -337,9 +342,16 @@ export default function ListDetail() {
             </Button>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3">
             {listContacts.map((contact) => (
-              <Card key={contact.id} className="hover:shadow-md transition-shadow">
+              <Card 
+                key={contact.id} 
+                className="hover:shadow-md transition-shadow cursor-pointer"
+                onClick={() => {
+                  setSelectedContact(contact);
+                  setIsContactDetailOpen(true);
+                }}
+              >
                 <CardContent className="p-4">
                   <div className="flex items-start space-x-3">
                     <Avatar className="w-12 h-12">
@@ -357,38 +369,14 @@ export default function ListDetail() {
                       </h3>
                       <p className="text-sm text-slate-600 mt-1">{contact.role || ''}</p>
                       <p className="text-sm text-slate-500">{contact.company || ''}</p>
-                      <div className="flex items-center space-x-4 mt-2">
-                        {contact.linkedin && (
-                          <a 
-                            href={contact.linkedin} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="text-primary text-xs hover:underline"
-                          >
-                            LinkedIn
-                          </a>
-                        )}
-                        {contact.portfolio && (
-                          <a 
-                            href={contact.portfolio} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="text-primary text-xs hover:underline"
-                          >
-                            Portfolio
-                          </a>
-                        )}
-                      </div>
-                      {contact.notes && (
-                        <div className="mt-2 text-xs text-slate-500 bg-slate-50 rounded p-2">
-                          {contact.notes}
-                        </div>
-                      )}
                     </div>
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => removeContactMutation.mutate(contact.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeContactMutation.mutate(contact.id);
+                      }}
                       className="text-slate-400 hover:text-red-600 p-1"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -403,6 +391,13 @@ export default function ListDetail() {
       </main>
       
       <BottomNavigation />
+      
+      <ContactDetailModal
+        open={isContactDetailOpen}
+        onOpenChange={setIsContactDetailOpen}
+        contact={selectedContact}
+        onRefetch={handleContactRefetch}
+      />
     </>
   );
 }
