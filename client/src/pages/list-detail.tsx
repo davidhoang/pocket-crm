@@ -136,51 +136,105 @@ export default function ListDetail() {
 
   if (listLoading) {
     return (
-      <div className="p-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="animate-pulse space-y-4">
-            <div className="h-8 bg-slate-200 rounded w-48"></div>
-            <div className="h-4 bg-slate-200 rounded w-64"></div>
+      <>
+        {/* Mobile Header */}
+        <div className="bg-white border-b border-slate-200 px-4 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center">
+                <Users className="w-4 h-4 text-white" />
+              </div>
+              <div>
+                <h1 className="font-semibold text-slate-800">Design CRM</h1>
+                <p className="text-sm text-slate-600">Loading list...</p>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+
+        <main className="pb-20 bg-gray-50 min-h-screen">
+          <div className="px-4 py-4">
+            <div className="animate-pulse space-y-4">
+              <div className="h-8 bg-slate-200 rounded w-48"></div>
+              <div className="h-4 bg-slate-200 rounded w-64"></div>
+            </div>
+          </div>
+        </main>
+        
+        <BottomNavigation />
+      </>
     );
   }
 
   if (!list) {
     return (
-      <div className="p-4">
-        <div className="max-w-4xl mx-auto text-center py-12">
-          <h2 className="text-xl font-semibold text-slate-600">List not found</h2>
-          <Button onClick={() => setLocation("/lists")} className="mt-4">
-            Back to Lists
-          </Button>
+      <>
+        {/* Mobile Header */}
+        <div className="bg-white border-b border-slate-200 px-4 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center">
+                <Users className="w-4 h-4 text-white" />
+              </div>
+              <div>
+                <h1 className="font-semibold text-slate-800">Design CRM</h1>
+                <p className="text-sm text-slate-600">List not found</p>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+
+        <main className="pb-20 bg-gray-50 min-h-screen">
+          <div className="px-4 py-4 text-center py-12">
+            <h2 className="text-xl font-semibold text-slate-600">List not found</h2>
+            <Button onClick={() => setLocation("/lists")} className="mt-4">
+              Back to Lists
+            </Button>
+          </div>
+        </main>
+        
+        <BottomNavigation />
+      </>
     );
   }
 
   return (
-    <div className="p-4 pb-20">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center space-x-3 mb-6">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setLocation("/lists")}
-            className="p-2"
-          >
-            <ArrowLeft className="w-4 h-4" />
-          </Button>
-          <div className="flex-1">
-            <h1 className="text-2xl font-bold text-slate-800">{list.name}</h1>
-            {list.description && (
-              <p className="text-slate-600 mt-1">{list.description}</p>
-            )}
+    <>
+      {/* Mobile Header */}
+      <div className="bg-white border-b border-slate-200 px-4 py-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center">
+              <Users className="w-4 h-4 text-white" />
+            </div>
+            <div>
+              <h1 className="font-semibold text-slate-800">Design CRM</h1>
+              <p className="text-sm text-slate-600">{list.name}</p>
+            </div>
           </div>
         </div>
+      </div>
 
-        <div className="flex items-center justify-between mb-6">
+      <main className="pb-20 bg-gray-50 min-h-screen">
+        <div className="px-4 py-4">
+          <div className="flex items-center space-x-3 mb-6">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setLocation("/lists")}
+              className="p-2"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </Button>
+            <div className="flex-1">
+              <h2 className="text-xl font-bold text-slate-800">{list.name}</h2>
+              {list.description && (
+                <p className="text-slate-600 mt-1">{list.description}</p>
+              )}
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-2 text-sm text-slate-600">
             <Users className="w-4 h-4" />
             <span>{listContacts.length} contact{listContacts.length !== 1 ? 's' : ''}</span>
@@ -342,8 +396,10 @@ export default function ListDetail() {
             ))}
           </div>
         )}
-      </div>
+        </div>
+      </main>
+      
       <BottomNavigation />
-    </div>
+    </>
   );
 }
