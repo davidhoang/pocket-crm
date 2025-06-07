@@ -103,7 +103,9 @@ export default function ListDetail() {
   });
 
   const getInitials = (firstName: string, lastName: string) => {
-    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+    const first = firstName ? firstName.charAt(0) : '';
+    const last = lastName ? lastName.charAt(0) : '';
+    return `${first}${last}`.toUpperCase() || '??';
   };
 
   // Filter out contacts that are already in the list
@@ -220,10 +222,10 @@ export default function ListDetail() {
                         </Avatar>
                         <div className="flex-1 min-w-0">
                           <p className="font-medium text-sm truncate">
-                            {contact.firstName} {contact.lastName}
+                            {contact.firstName || ''} {contact.lastName || ''}
                           </p>
                           <p className="text-xs text-slate-500 truncate">
-                            {contact.role} at {contact.company}
+                            {contact.role || ''} at {contact.company || ''}
                           </p>
                         </div>
                       </div>
@@ -293,10 +295,10 @@ export default function ListDetail() {
                     </Avatar>
                     <div className="flex-1 min-w-0">
                       <h3 className="font-semibold text-slate-800 truncate">
-                        {contact.firstName} {contact.lastName}
+                        {contact.firstName || ''} {contact.lastName || ''}
                       </h3>
-                      <p className="text-sm text-slate-600 mt-1">{contact.role}</p>
-                      <p className="text-sm text-slate-500">{contact.company}</p>
+                      <p className="text-sm text-slate-600 mt-1">{contact.role || ''}</p>
+                      <p className="text-sm text-slate-500">{contact.company || ''}</p>
                       <div className="flex items-center space-x-4 mt-2">
                         {contact.linkedin && (
                           <a 
