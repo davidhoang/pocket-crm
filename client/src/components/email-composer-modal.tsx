@@ -3,6 +3,8 @@ import { useMutation } from "@tanstack/react-query";
 import { type Contact } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { isUnauthorizedError } from "@/lib/authUtils";
 import {
   Dialog,
   DialogContent,
@@ -45,7 +47,18 @@ export default function EmailComposerModal({
       setMessage("Hi [Name],\n\nI've curated a list of exceptional design talent that might be a great fit for your team...");
       onSuccess();
     },
-    onError: () => {
+    onError: (error) => {
+      if (isUnauthorizedError(error)) {
+        toast({
+          title: "Unauthorized",
+          description: "You are logged out. Logging in again...",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 500);
+        return;
+      }
       toast({
         title: "Failed to send email",
         description: "Please check your SendGrid configuration and try again.",
@@ -119,18 +132,35 @@ export default function EmailComposerModal({
           <div>
             <Label>Selected Contacts</Label>
             <div className="mt-2 space-y-2 max-h-32 overflow-y-auto bg-slate-50 rounded-lg p-3">
-              {selectedContacts.map((contact) => (
-                <div key={contact.id} className="flex items-center justify-between text-sm">
-                  <span>{contact.firstName} {contact.lastName} - {contact.role} at {contact.company}</span>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="p-1 text-slate-400 hover:text-slate-600"
-                  >
-                    <X className="w-3 h-3" />
-                  </Button>
-                </div>
-              ))}
+              {selectedContacts.map((contact) => {
+                const getInitials = (firstName: string, lastName: string) => {
+                  return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+                };
+                
+                return (
+                  <div key={contact.id} className="flex items-center space-x-3 text-sm">
+                    <Avatar className="w-8 h-8">
+                      <AvatarImage 
+                        src={contact.profilePhoto || undefined} 
+                        alt={`${contact.firstName} ${contact.lastName}`}
+                      />
+                      <AvatarFallback className="bg-primary text-white text-xs">
+                        {getInitials(contact.firstName, contact.lastName)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex-grow">
+                      <span>{contact.firstName} {contact.lastName} - {contact.role} at {contact.company}</span>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="p-1 text-slate-400 hover:text-slate-600"
+                    >
+                      <X className="w-3 h-3" />
+                    </Button>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
