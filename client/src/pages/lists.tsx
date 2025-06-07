@@ -166,7 +166,7 @@ export default function Lists() {
           </div>
         </div>
 
-        <main className="pb-20">
+        <main className="pb-20 bg-gray-50 min-h-screen">
           <div className="px-4 py-4">
             <div className="animate-pulse space-y-4">
               <div className="h-8 bg-slate-200 rounded w-48"></div>
@@ -201,7 +201,7 @@ export default function Lists() {
         </div>
       </div>
 
-      <main className="pb-20">
+      <main className="pb-20 bg-gray-50 min-h-screen">
         <div className="px-4 py-4">
           <div className="flex items-center justify-between mb-6">
             <div>
