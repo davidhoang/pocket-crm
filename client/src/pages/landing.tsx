@@ -65,7 +65,7 @@ export default function Landing() {
           <div className="space-y-3">
             <Button
               size="lg"
-              className="w-full hover:bg-blue-700 text-white bg-[#333]"
+              className="w-full bg-primary hover:bg-primary/90 text-white"
               onClick={() => (window.location.href = "/api/login")}
             >Sign in</Button>
             <p className="text-xs text-slate-500 text-center">
