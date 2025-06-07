@@ -21,30 +21,36 @@ interface EmailComposerModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   selectedContacts: Contact[];
+  listId: number;
+  listName: string;
   onSuccess: () => void;
 }
 
 export default function EmailComposerModal({ 
   open, 
   onOpenChange, 
-  selectedContacts, 
+  selectedContacts,
+  listId,
+  listName,
   onSuccess 
 }: EmailComposerModalProps) {
   const { toast } = useToast();
   const [to, setTo] = useState("");
-  const [subject, setSubject] = useState("Curated Design Talent List");
-  const [message, setMessage] = useState("Hi [Name],\n\nI've curated a list of exceptional design talent that might be a great fit for your team...");
+  const [from, setFrom] = useState("");
+  const [subject, setSubject] = useState(`${listName} - Curated Design Talent`);
+  const [message, setMessage] = useState("Hi there,\n\nI've put together a curated list of exceptional design talent that might be a great fit for your team. Please find the details below.\n\nBest regards");
 
   const sendEmailMutation = useMutation({
-    mutationFn: (data: any) => apiRequest("POST", "/api/send-email", data),
+    mutationFn: (data: any) => apiRequest("POST", `/api/lists/${listId}/send`, data),
     onSuccess: () => {
       toast({
         title: "Email sent successfully!",
         description: "Your curated talent list has been sent.",
       });
       setTo("");
-      setSubject("Curated Design Talent List");
-      setMessage("Hi [Name],\n\nI've curated a list of exceptional design talent that might be a great fit for your team...");
+      setFrom("");
+      setSubject(`${listName} - Curated Design Talent`);
+      setMessage("Hi there,\n\nI've put together a curated list of exceptional design talent that might be a great fit for your team. Please find the details below.\n\nBest regards");
       onSuccess();
     },
     onError: (error) => {
@@ -68,7 +74,7 @@ export default function EmailComposerModal({
   });
 
   const handleSubmit = () => {
-    if (!to || !subject || !message) {
+    if (!to || !from || !subject) {
       toast({
         title: "Missing fields",
         description: "Please fill in all required fields.",
@@ -79,9 +85,9 @@ export default function EmailComposerModal({
 
     sendEmailMutation.mutate({
       to,
+      from,
       subject,
       message,
-      contactIds: selectedContacts.map(c => c.id),
     });
   };
 
@@ -104,6 +110,18 @@ export default function EmailComposerModal({
               value={to}
               onChange={(e) => setTo(e.target.value)}
               placeholder="recruiter@company.com"
+              className="mt-1"
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="from">From (Your Email)</Label>
+            <Input
+              id="from"
+              type="email"
+              value={from}
+              onChange={(e) => setFrom(e.target.value)}
+              placeholder="your@email.com"
               className="mt-1"
             />
           </div>

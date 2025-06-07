@@ -284,6 +284,110 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Send list via email
+  app.post("/api/lists/:id/send", isAuthenticated, async (req, res) => {
+    try {
+      const listId = parseInt(req.params.id);
+      const { to, from, subject, message } = req.body;
+      
+      if (!to || !from || !subject) {
+        return res.status(400).json({ message: "Missing required fields: to, from, subject" });
+      }
+
+      // Get list and contacts
+      const list = await storage.getList(listId);
+      const contacts = await storage.getListContacts(listId);
+      
+      if (!list) {
+        return res.status(404).json({ message: "List not found" });
+      }
+
+      // Generate email content
+      const contactsHtml = contacts.map(contact => `
+        <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 12px; background: #f8fafc;">
+          <h3 style="margin: 0 0 8px 0; color: #1e293b; font-size: 16px; font-weight: 600;">
+            ${contact.firstName} ${contact.lastName}
+          </h3>
+          <p style="margin: 4px 0; color: #475569; font-size: 14px;">
+            <strong>Role:</strong> ${contact.role || 'Not specified'}
+          </p>
+          <p style="margin: 4px 0; color: #475569; font-size: 14px;">
+            <strong>Company:</strong> ${contact.company || 'Not specified'}
+          </p>
+          ${contact.linkedin ? `
+            <p style="margin: 4px 0;">
+              <a href="${contact.linkedin}" style="color: #3b82f6; text-decoration: none; font-size: 14px;">LinkedIn Profile</a>
+            </p>
+          ` : ''}
+          ${contact.portfolio ? `
+            <p style="margin: 4px 0;">
+              <a href="${contact.portfolio}" style="color: #3b82f6; text-decoration: none; font-size: 14px;">Portfolio</a>
+            </p>
+          ` : ''}
+          ${contact.notes ? `
+            <p style="margin: 8px 0 0 0; color: #64748b; font-size: 12px; font-style: italic;">
+              ${contact.notes}
+            </p>
+          ` : ''}
+        </div>
+      `).join('');
+
+      const htmlContent = `
+        <div style="max-width: 600px; margin: 0 auto; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+          <h1 style="color: #1e293b; margin-bottom: 16px;">${list.name}</h1>
+          ${list.description ? `<p style="color: #475569; margin-bottom: 24px;">${list.description}</p>` : ''}
+          ${message ? `<p style="color: #374151; margin-bottom: 24px;">${message}</p>` : ''}
+          
+          <h2 style="color: #1e293b; margin-bottom: 16px; font-size: 18px;">Design Talent (${contacts.length} contacts)</h2>
+          ${contactsHtml}
+          
+          <div style="margin-top: 32px; padding-top: 16px; border-top: 1px solid #e2e8f0; text-align: center;">
+            <p style="color: #64748b; font-size: 12px; margin: 0;">
+              Sent from Design CRM
+            </p>
+          </div>
+        </div>
+      `;
+
+      const textContent = `
+${list.name}
+${list.description ? `${list.description}\n` : ''}
+${message ? `${message}\n` : ''}
+
+Design Talent (${contacts.length} contacts):
+
+${contacts.map(contact => `
+${contact.firstName} ${contact.lastName}
+Role: ${contact.role || 'Not specified'}
+Company: ${contact.company || 'Not specified'}
+${contact.linkedin ? `LinkedIn: ${contact.linkedin}` : ''}
+${contact.portfolio ? `Portfolio: ${contact.portfolio}` : ''}
+${contact.notes ? `Notes: ${contact.notes}` : ''}
+---
+`).join('')}
+
+Sent from Design CRM
+      `;
+
+      const success = await sendEmail({
+        to,
+        from,
+        subject,
+        html: htmlContent,
+        text: textContent
+      });
+
+      if (success) {
+        res.json({ message: "List sent successfully" });
+      } else {
+        res.status(500).json({ message: "Failed to send email" });
+      }
+    } catch (error) {
+      console.error("Error sending list:", error);
+      res.status(500).json({ message: "Failed to send list" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
