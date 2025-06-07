@@ -207,7 +207,7 @@ export default function ListDetail() {
   }
 
   return (
-    <>
+    <div className="min-h-screen max-w-md mx-auto bg-white shadow-xl relative">
       {/* Mobile Header */}
       <div className="bg-white border-b border-slate-200 px-4 py-3">
         <div className="flex items-center justify-between">
@@ -223,7 +223,7 @@ export default function ListDetail() {
         </div>
       </div>
 
-      <main className="pb-20 bg-gray-50 min-h-screen">
+      <main className="pb-20">
         <div className="px-4 py-4">
           <div className="flex items-center space-x-3 mb-6">
             <Button
@@ -398,6 +398,6 @@ export default function ListDetail() {
         contact={selectedContact}
         onRefetch={handleContactRefetch}
       />
-    </>
+    </div>
   );
 }
