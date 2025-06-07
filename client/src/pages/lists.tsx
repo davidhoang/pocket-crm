@@ -12,6 +12,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Plus, Users, Mail, Trash2 } from "lucide-react";
 import BottomNavigation from "@/components/bottom-navigation";
+import EmailComposerModal from "@/components/email-composer-modal";
 
 export default function Lists() {
   const { toast } = useToast();
@@ -20,9 +21,16 @@ export default function Lists() {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [newListName, setNewListName] = useState("");
   const [newListDescription, setNewListDescription] = useState("");
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+  const [selectedListForEmail, setSelectedListForEmail] = useState<List | null>(null);
 
   const { data: lists = [], isLoading } = useQuery<List[]>({
     queryKey: ["/api/lists"],
+  });
+
+  const { data: selectedListContacts = [] } = useQuery<Contact[]>({
+    queryKey: [`/api/lists/${selectedListForEmail?.id}/contacts`],
+    enabled: !!selectedListForEmail?.id,
   });
 
   const createListMutation = useMutation({
@@ -86,6 +94,11 @@ export default function Lists() {
       });
     },
   });
+
+  const handleSendList = (list: List) => {
+    setSelectedListForEmail(list);
+    setIsEmailModalOpen(true);
+  };
 
   const handleCreateList = () => {
     if (!newListName.trim()) {
@@ -235,7 +248,10 @@ export default function Lists() {
                       >
                         View
                       </Button>
-                      <Button size="sm">
+                      <Button 
+                        size="sm"
+                        onClick={() => handleSendList(list)}
+                      >
                         <Mail className="w-4 h-4 mr-1" />
                         Send
                       </Button>
@@ -248,6 +264,20 @@ export default function Lists() {
         )}
       </div>
       <BottomNavigation />
+      
+      {selectedListForEmail && (
+        <EmailComposerModal
+          open={isEmailModalOpen}
+          onOpenChange={setIsEmailModalOpen}
+          selectedContacts={selectedListContacts}
+          listId={selectedListForEmail.id}
+          listName={selectedListForEmail.name}
+          onSuccess={() => {
+            setIsEmailModalOpen(false);
+            setSelectedListForEmail(null);
+          }}
+        />
+      )}
     </div>
   );
 }
