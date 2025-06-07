@@ -166,10 +166,10 @@ export class DatabaseStorage implements IStorage {
         profilePhoto: contacts.profilePhoto,
       })
       .from(listContacts)
-      .leftJoin(contacts, eq(listContacts.contactId, contacts.id))
+      .innerJoin(contacts, eq(listContacts.contactId, contacts.id))
       .where(eq(listContacts.listId, listId));
     
-    return listContactsData.filter(contact => contact.id !== null) as Contact[];
+    return listContactsData;
   }
 
   async addContactToList(listContact: InsertListContact): Promise<ListContact> {
