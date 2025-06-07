@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { type Contact } from "@shared/schema";
 import MobileHeader from "@/components/mobile-header";
@@ -8,18 +8,37 @@ import EmailComposerModal from "@/components/email-composer-modal";
 import BottomNavigation from "@/components/bottom-navigation";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Home() {
+  const { toast } = useToast();
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
   const [selectedContacts, setSelectedContacts] = useState<number[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [searchVisible, setSearchVisible] = useState(false);
 
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      toast({
+        title: "Unauthorized",
+        description: "You are logged out. Logging in again...",
+        variant: "destructive",
+      });
+      setTimeout(() => {
+        window.location.href = "/api/login";
+      }, 500);
+      return;
+    }
+  }, [isAuthenticated, authLoading, toast]);
+
   // Fetch contacts or search results
   const { data: contacts = [], isLoading, refetch } = useQuery<Contact[]>({
     queryKey: searchQuery ? ["/api/contacts/search", { q: searchQuery }] : ["/api/contacts"],
-    enabled: true,
+    enabled: isAuthenticated,
   });
 
   const handleContactSelect = (contactId: number, selected: boolean) => {
