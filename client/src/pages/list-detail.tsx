@@ -28,7 +28,7 @@ export default function ListDetail() {
   });
 
   const { data: listContacts = [], isLoading: contactsLoading } = useQuery<Contact[]>({
-    queryKey: ["/api/lists", listId, "contacts"],
+    queryKey: [`/api/lists/${listId}/contacts`],
     enabled: !!listId,
   });
 
@@ -44,7 +44,7 @@ export default function ListDetail() {
       return Promise.all(promises);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/lists", listId, "contacts"] });
+      queryClient.invalidateQueries({ queryKey: [`/api/lists/${listId}/contacts`] });
       setSelectedContactIds([]);
       setIsAddContactsOpen(false);
       toast({
@@ -76,7 +76,7 @@ export default function ListDetail() {
     mutationFn: (contactId: number) =>
       apiRequest("DELETE", `/api/lists/${listId}/contacts/${contactId}`),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/lists", listId, "contacts"] });
+      queryClient.invalidateQueries({ queryKey: [`/api/lists/${listId}/contacts`] });
       toast({
         title: "Contact removed",
         description: "Contact has been removed from the list.",

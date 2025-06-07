@@ -147,6 +147,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get contacts in a specific list
+  app.get("/api/lists/:id/contacts", isAuthenticated, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const contacts = await storage.getListContacts(id);
+      res.json(contacts);
+    } catch (error) {
+      console.error("Error fetching list contacts:", error);
+      res.status(500).json({ message: "Failed to fetch list contacts" });
+    }
+  });
+
   app.put("/api/lists/:id", isAuthenticated, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
