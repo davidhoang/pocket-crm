@@ -1,3 +1,4 @@
+import { useState, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,6 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { Upload } from "lucide-react";
 
 interface AddContactModalProps {
   open: boolean;
@@ -31,6 +33,8 @@ interface AddContactModalProps {
 
 export default function AddContactModal({ open, onOpenChange, onSuccess }: AddContactModalProps) {
   const { toast } = useToast();
+  const [photoPreview, setPhotoPreview] = useState<string>("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<InsertContact>({
     resolver: zodResolver(insertContactSchema),
@@ -76,6 +80,28 @@ export default function AddContactModal({ open, onOpenChange, onSuccess }: AddCo
       });
     },
   });
+
+  const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) { // 2MB limit
+        toast({
+          title: "File too large",
+          description: "Please select an image smaller than 2MB.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        setPhotoPreview(base64String);
+        form.setValue("profilePhoto", base64String);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const onSubmit = (data: InsertContact) => {
     createContactMutation.mutate(data);
@@ -180,10 +206,49 @@ export default function AddContactModal({ open, onOpenChange, onSuccess }: AddCo
               name="profilePhoto"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Profile Photo URL</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="url" placeholder="https://..." />
-                  </FormControl>
+                  <FormLabel>Profile Photo</FormLabel>
+                  <div className="space-y-3">
+                    <div className="flex items-center space-x-3">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="flex items-center space-x-2"
+                      >
+                        <Upload className="w-4 h-4" />
+                        <span>Upload Photo</span>
+                      </Button>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={handlePhotoUpload}
+                        className="hidden"
+                      />
+                      {photoPreview && (
+                        <div className="w-12 h-12 rounded-full overflow-hidden border">
+                          <img 
+                            src={photoPreview} 
+                            alt="Preview" 
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      )}
+                    </div>
+                    <FormControl>
+                      <Input 
+                        {...field} 
+                        type="url" 
+                        placeholder="Or paste photo URL"
+                        onChange={(e) => {
+                          field.onChange(e);
+                          if (e.target.value) {
+                            setPhotoPreview(e.target.value);
+                          }
+                        }}
+                      />
+                    </FormControl>
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}
