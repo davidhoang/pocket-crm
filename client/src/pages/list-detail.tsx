@@ -12,6 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ArrowLeft, Plus, Mail, Trash2, Users } from "lucide-react";
 import BottomNavigation from "@/components/bottom-navigation";
+import ContactDetailModal from "@/components/contact-detail-modal";
 
 export default function ListDetail() {
   const { id } = useParams();
@@ -20,6 +21,8 @@ export default function ListDetail() {
   const queryClient = useQueryClient();
   const [isAddContactsOpen, setIsAddContactsOpen] = useState(false);
   const [selectedContactIds, setSelectedContactIds] = useState<number[]>([]);
+  const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
+  const [isContactDetailOpen, setIsContactDetailOpen] = useState(false);
 
   const listId = parseInt(id as string);
 
