@@ -8,6 +8,7 @@ import { MoreHorizontal, ExternalLink } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { isUnauthorizedError } from "@/lib/authUtils";
+import EditContactModal from "@/components/edit-contact-modal";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,6 +25,7 @@ interface ContactCardProps {
 
 export default function ContactCard({ contact, selected, onSelect, onRefetch }: ContactCardProps) {
   const { toast } = useToast();
+  const [isEditOpen, setIsEditOpen] = useState(false);
 
   const deleteContactMutation = useMutation({
     mutationFn: () => apiRequest("DELETE", `/api/contacts/${contact.id}`),
@@ -59,7 +61,9 @@ export default function ContactCard({ contact, selected, onSelect, onRefetch }: 
   };
 
   const getInitials = (firstName: string, lastName: string) => {
-    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+    const first = firstName ? firstName.charAt(0) : '';
+    const last = lastName ? lastName.charAt(0) : '';
+    return `${first}${last}`.toUpperCase() || '??';
   };
 
   return (
@@ -94,7 +98,9 @@ export default function ContactCard({ contact, selected, onSelect, onRefetch }: 
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem>Edit</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setIsEditOpen(true)}>
+                  Edit
+                </DropdownMenuItem>
                 <DropdownMenuItem 
                   onClick={handleDelete}
                   className="text-red-600 focus:text-red-600"
@@ -137,6 +143,13 @@ export default function ContactCard({ contact, selected, onSelect, onRefetch }: 
           )}
         </div>
       </div>
+      
+      <EditContactModal
+        open={isEditOpen}
+        onOpenChange={setIsEditOpen}
+        contact={contact}
+        onSuccess={onRefetch}
+      />
     </div>
   );
 }
