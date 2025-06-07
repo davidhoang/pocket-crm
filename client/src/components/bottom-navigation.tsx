@@ -1,4 +1,4 @@
-import { Users, Mail, List, Settings } from "lucide-react";
+import { Users, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 
@@ -8,8 +8,6 @@ export default function BottomNavigation() {
   const navItems = [
     { path: "/", icon: Users, label: "Contacts" },
     { path: "/lists", icon: List, label: "Lists" },
-    { path: "/email", icon: Mail, label: "Email" },
-    { path: "/settings", icon: Settings, label: "Settings" },
   ];
 
   return (
