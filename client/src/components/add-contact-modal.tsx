@@ -180,7 +180,12 @@ export default function AddContactModal({ open, onOpenChange, onSuccess }: AddCo
                 <FormItem>
                   <FormLabel>LinkedIn URL</FormLabel>
                   <FormControl>
-                    <Input {...field} type="url" placeholder="https://linkedin.com/in/..." />
+                    <Input 
+                      {...field} 
+                      type="url" 
+                      placeholder="https://linkedin.com/in/..." 
+                      value={field.value || ""} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -194,7 +199,12 @@ export default function AddContactModal({ open, onOpenChange, onSuccess }: AddCo
                 <FormItem>
                   <FormLabel>Portfolio URL</FormLabel>
                   <FormControl>
-                    <Input {...field} type="url" placeholder="https://..." />
+                    <Input 
+                      {...field} 
+                      type="url" 
+                      placeholder="https://..." 
+                      value={field.value || ""} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -240,6 +250,7 @@ export default function AddContactModal({ open, onOpenChange, onSuccess }: AddCo
                         {...field} 
                         type="url" 
                         placeholder="Or paste photo URL"
+                        value={field.value || ""}
                         onChange={(e) => {
                           field.onChange(e);
                           if (e.target.value) {
@@ -266,6 +277,7 @@ export default function AddContactModal({ open, onOpenChange, onSuccess }: AddCo
                       placeholder="Obsidian-ready notes..." 
                       rows={3}
                       className="resize-none"
+                      value={field.value || ""}
                     />
                   </FormControl>
                   <FormMessage />

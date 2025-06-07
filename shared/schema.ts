@@ -51,6 +51,11 @@ export type User = typeof users.$inferSelect;
 
 export const insertContactSchema = createInsertSchema(contacts).omit({
   id: true,
+}).extend({
+  linkedin: z.string().optional(),
+  portfolio: z.string().optional(),
+  profilePhoto: z.string().optional(),
+  notes: z.string().optional(),
 });
 
 export type InsertContact = z.infer<typeof insertContactSchema>;
