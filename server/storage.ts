@@ -1,10 +1,22 @@
-import { users, contacts, type User, type InsertUser, type Contact, type InsertContact } from "@shared/schema";
+import {
+  users,
+  contacts,
+  type User,
+  type UpsertUser,
+  type Contact,
+  type InsertContact,
+} from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
+// Interface for storage operations
 export interface IStorage {
-  getUser(id: number): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  // User operations
+  // (IMPORTANT) these user operations are mandatory for Replit Auth.
+  getUser(id: string): Promise<User | undefined>;
+  upsertUser(user: UpsertUser): Promise<User>;
   
+  // Contact operations
   getContacts(): Promise<Contact[]>;
   getContact(id: number): Promise<Contact | undefined>;
   createContact(contact: InsertContact): Promise<Contact>;
@@ -13,69 +25,70 @@ export interface IStorage {
   searchContacts(query: string): Promise<Contact[]>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<number, User>;
-  private contacts: Map<number, Contact>;
-  private currentUserId: number;
-  private currentContactId: number;
+export class DatabaseStorage implements IStorage {
+  // User operations
+  // (IMPORTANT) these user operations are mandatory for Replit Auth.
 
-  constructor() {
-    this.users = new Map();
-    this.contacts = new Map();
-    this.currentUserId = 1;
-    this.currentContactId = 1;
-  }
-
-  async getUser(id: number): Promise<User | undefined> {
-    return this.users.get(id);
-  }
-
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
-  }
-
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = this.currentUserId++;
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
+  async getUser(id: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
     return user;
   }
 
+  async upsertUser(userData: UpsertUser): Promise<User> {
+    const [user] = await db
+      .insert(users)
+      .values(userData)
+      .onConflictDoUpdate({
+        target: users.id,
+        set: {
+          ...userData,
+          updatedAt: new Date(),
+        },
+      })
+      .returning();
+    return user;
+  }
+
+  // Contact operations
   async getContacts(): Promise<Contact[]> {
-    return Array.from(this.contacts.values());
+    return await db.select().from(contacts);
   }
 
   async getContact(id: number): Promise<Contact | undefined> {
-    return this.contacts.get(id);
+    const [contact] = await db.select().from(contacts).where(eq(contacts.id, id));
+    return contact;
   }
 
   async createContact(insertContact: InsertContact): Promise<Contact> {
-    const id = this.currentContactId++;
-    const contact: Contact = { ...insertContact, id };
-    this.contacts.set(id, contact);
+    const [contact] = await db
+      .insert(contacts)
+      .values(insertContact)
+      .returning();
     return contact;
   }
 
   async updateContact(id: number, updateData: Partial<InsertContact>): Promise<Contact | undefined> {
-    const existingContact = this.contacts.get(id);
-    if (!existingContact) {
-      return undefined;
-    }
-    
-    const updatedContact: Contact = { ...existingContact, ...updateData };
-    this.contacts.set(id, updatedContact);
-    return updatedContact;
+    const [contact] = await db
+      .update(contacts)
+      .set(updateData)
+      .where(eq(contacts.id, id))
+      .returning();
+    return contact;
   }
 
   async deleteContact(id: number): Promise<boolean> {
-    return this.contacts.delete(id);
+    try {
+      await db.delete(contacts).where(eq(contacts.id, id));
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 
   async searchContacts(query: string): Promise<Contact[]> {
+    const allContacts = await db.select().from(contacts);
     const lowerQuery = query.toLowerCase();
-    return Array.from(this.contacts.values()).filter(contact =>
+    return allContacts.filter(contact =>
       contact.firstName.toLowerCase().includes(lowerQuery) ||
       contact.lastName.toLowerCase().includes(lowerQuery) ||
       contact.role.toLowerCase().includes(lowerQuery) ||
@@ -84,4 +97,4 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();
