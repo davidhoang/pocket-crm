@@ -69,7 +69,7 @@ export default function ContactCard({ contact, selected, onSelect, onRefetch }: 
   return (
     <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
       <div className="flex items-start space-x-3">
-        <div className="flex-shrink-0 mt-1">
+        <div className="flex-shrink-0 flex items-center h-12">
           <Checkbox
             checked={selected}
             onCheckedChange={(checked) => onSelect(!!checked)}
