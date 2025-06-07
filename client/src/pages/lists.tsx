@@ -202,64 +202,65 @@ export default function Lists() {
       </div>
 
       <main className="pb-20 bg-gray-50 min-h-screen">
-        <div className="px-4 py-4">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h2 className="text-xl font-bold text-slate-800">Designer Lists</h2>
-              <p className="text-slate-600">Organize and manage curated lists of design talent</p>
-            </div>
-            
-            <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-            <DialogTrigger asChild>
-              <Button className="flex items-center space-x-2">
-                <Plus className="w-4 h-4" />
-                <span>New List</span>
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Create New List</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4">
-                <div>
-                  <label className="text-sm font-medium">List Name</label>
-                  <Input
-                    value={newListName}
-                    onChange={(e) => setNewListName(e.target.value)}
-                    placeholder="e.g., Senior UX Designers"
-                    className="mt-1"
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium">Description (Optional)</label>
-                  <Textarea
-                    value={newListDescription}
-                    onChange={(e) => setNewListDescription(e.target.value)}
-                    placeholder="Brief description of this list..."
-                    rows={3}
-                    className="mt-1 resize-none"
-                  />
-                </div>
-                <div className="flex space-x-3 pt-4">
-                  <Button
-                    onClick={() => setIsCreateDialogOpen(false)}
-                    variant="outline"
-                    className="flex-1"
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    onClick={handleCreateList}
-                    disabled={createListMutation.isPending}
-                    className="flex-1"
-                  >
-                    {createListMutation.isPending ? "Creating..." : "Create List"}
-                  </Button>
-                </div>
+        <div className="max-w-md mx-auto">
+          <div className="px-4 py-4">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-xl font-bold text-slate-800">Designer Lists</h2>
+                <p className="text-slate-600">Organize and manage curated lists of design talent</p>
               </div>
-            </DialogContent>
-          </Dialog>
-        </div>
+              
+              <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button className="flex items-center space-x-2">
+                    <Plus className="w-4 h-4" />
+                    <span>New List</span>
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Create New List</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="text-sm font-medium">List Name</label>
+                      <Input
+                        value={newListName}
+                        onChange={(e) => setNewListName(e.target.value)}
+                        placeholder="e.g., Senior UX Designers"
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium">Description (Optional)</label>
+                      <Textarea
+                        value={newListDescription}
+                        onChange={(e) => setNewListDescription(e.target.value)}
+                        placeholder="Brief description of this list..."
+                        rows={3}
+                        className="mt-1 resize-none"
+                      />
+                    </div>
+                    <div className="flex space-x-3 pt-4">
+                      <Button
+                        onClick={() => setIsCreateDialogOpen(false)}
+                        variant="outline"
+                        className="flex-1"
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        onClick={handleCreateList}
+                        disabled={createListMutation.isPending}
+                        className="flex-1"
+                      >
+                        {createListMutation.isPending ? "Creating..." : "Create List"}
+                      </Button>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
 
         {(lists as List[]).length === 0 ? (
           <div className="text-center py-12">
@@ -323,6 +324,7 @@ export default function Lists() {
             ))}
           </div>
         )}
+          </div>
         </div>
       </main>
       
