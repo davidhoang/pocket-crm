@@ -10,8 +10,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Camera, Upload } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
+import { Camera, Upload, X } from "lucide-react";
 
 interface EditContactModalProps {
   open: boolean;
@@ -129,24 +129,29 @@ export default function EditContactModal({ open, onOpenChange, contact, onSucces
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-full max-w-md mx-4">
-        <DialogHeader>
-          <DialogTitle>Edit Contact</DialogTitle>
+      <DialogContent className="w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto">
+        <DialogHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <DialogTitle className="text-lg font-semibold">Edit Contact</DialogTitle>
+          <DialogClose asChild>
+            <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+              <X className="h-4 w-4" />
+            </Button>
+          </DialogClose>
         </DialogHeader>
         
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
           {/* Profile Photo Upload */}
-          <div className="flex flex-col items-center space-y-3">
+          <div className="flex flex-col items-center space-y-2">
             <div className="relative">
               {profilePhoto ? (
                 <img 
                   src={profilePhoto} 
                   alt="Profile" 
-                  className="w-20 h-20 rounded-full object-cover border-2 border-slate-200"
+                  className="w-16 h-16 rounded-full object-cover border-2 border-slate-200"
                 />
               ) : (
-                <div className="w-20 h-20 rounded-full bg-slate-100 border-2 border-dashed border-slate-300 flex items-center justify-center">
-                  <Camera className="w-8 h-8 text-slate-400" />
+                <div className="w-16 h-16 rounded-full bg-slate-100 border-2 border-dashed border-slate-300 flex items-center justify-center">
+                  <Camera className="w-6 h-6 text-slate-400" />
                 </div>
               )}
               <input
@@ -167,7 +172,7 @@ export default function EditContactModal({ open, onOpenChange, contact, onSucces
                 type="button"
                 variant="outline"
                 size="sm"
-                className="text-xs pointer-events-none"
+                className="text-xs pointer-events-none h-7 px-2"
                 asChild
               >
                 <span>
@@ -252,19 +257,20 @@ export default function EditContactModal({ open, onOpenChange, contact, onSucces
           </div>
 
           <div>
-            <Label htmlFor="notes">Notes</Label>
+            <Label htmlFor="notes" className="text-sm">Notes</Label>
             <Textarea
               id="notes"
               {...form.register("notes")}
               placeholder="Add any notes about this contact..."
-              rows={3}
+              rows={2}
+              className="text-sm"
             />
             {form.formState.errors.notes && (
               <p className="text-red-500 text-xs mt-1">{form.formState.errors.notes.message}</p>
             )}
           </div>
 
-          <div className="flex gap-3 pt-4">
+          <div className="flex gap-3 pt-2">
             <Button
               type="button"
               variant="outline"
