@@ -144,10 +144,19 @@ export default function Home() {
         open={showEmailModal}
         onOpenChange={setShowEmailModal}
         selectedContacts={selectedContactsData}
+        listId={0}
+        listName="Selected Contacts"
         onSuccess={() => {
           setSelectedContacts([]);
           setShowEmailModal(false);
         }}
+      />
+
+      <ContactDetailModal
+        open={showContactDetail}
+        onOpenChange={setShowContactDetail}
+        contact={selectedContactForDetail}
+        onRefetch={refetch}
       />
     </div>
   );
