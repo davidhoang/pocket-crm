@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import Home from "@/pages/home";
 import Lists from "@/pages/lists";
 import ListDetail from "@/pages/list-detail";
+import Settings from "@/pages/settings";
 import Landing from "@/pages/landing";
 import NotFound from "@/pages/not-found";
 
@@ -22,6 +23,7 @@ function Router() {
           <Route path="/" component={Home} />
           <Route path="/lists" component={Lists} />
           <Route path="/lists/:id" component={ListDetail} />
+          <Route path="/settings" component={Settings} />
         </>
       )}
       <Route component={NotFound} />

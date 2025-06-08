@@ -1,12 +1,7 @@
-import { Search, MoreVertical, X, CheckCheck, LogOut } from "lucide-react";
+import { Search, X, CheckCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import logoPath from "@assets/visualelectric-1749342811885_1749342828607.png";
 
 interface MobileHeaderProps {
@@ -90,23 +85,6 @@ export default function MobileHeader({
             >
               <Search className="w-4 h-4" />
             </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="p-2 text-slate-600 hover:bg-slate-100 rounded-full"
-                >
-                  <MoreVertical className="w-4 h-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => window.location.href = '/api/logout'}>
-                  <LogOut className="w-4 h-4 mr-2" />
-                  Sign Out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
           </div>
         </div>
       )}
