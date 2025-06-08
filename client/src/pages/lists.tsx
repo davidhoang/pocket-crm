@@ -194,13 +194,12 @@ export default function Lists() {
               <Users className="w-4 h-4 text-white" />
             </div>
             <div>
-              <h1 className="font-semibold text-slate-800">Design CRM</h1>
+              <h1 className="text-slate-800 text-[18px] font-bold">Lists</h1>
               <p className="text-sm text-slate-600">{(lists as List[]).length} lists</p>
             </div>
           </div>
         </div>
       </div>
-
       <main className="pb-20">
         <div className="px-4 py-4">
           <div className="flex items-center justify-between mb-6">
@@ -327,9 +326,7 @@ export default function Lists() {
             )}
         </div>
       </main>
-      
       <BottomNavigation />
-      
       {selectedListForEmail && (
         <EmailComposerModal
           open={isEmailModalOpen}
