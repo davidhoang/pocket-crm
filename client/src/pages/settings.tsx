@@ -1,6 +1,5 @@
 import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import BottomNavigation from "@/components/bottom-navigation";
 import logoPath from "@assets/visualelectric-1749342811885_1749342828607.png";
 
@@ -28,19 +27,14 @@ export default function Settings() {
 
       <main className="pb-20">
         <div className="px-4 py-6">
-          {/* Sign Out */}
-          <Card className="border-red-200">
-            <CardContent className="pt-6">
-              <Button 
-                variant="outline" 
-                onClick={handleSignOut}
-                className="w-full border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
-              >
-                <LogOut className="w-4 h-4 mr-2" />
-                Sign Out
-              </Button>
-            </CardContent>
-          </Card>
+          <Button 
+            variant="outline" 
+            onClick={handleSignOut}
+            className="w-full border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
+          >
+            <LogOut className="w-4 h-4 mr-2" />
+            Sign Out
+          </Button>
         </div>
       </main>
 
