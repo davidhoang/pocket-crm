@@ -1,4 +1,4 @@
-import { Search, X, CheckCheck } from "lucide-react";
+import { Search, X, CheckCheck, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -14,6 +14,7 @@ interface MobileHeaderProps {
   onSelectAll: () => void;
   onClearSelection: () => void;
   onComposeEmail: () => void;
+  onAddContact: () => void;
 }
 
 export default function MobileHeader({
@@ -26,6 +27,7 @@ export default function MobileHeader({
   onSelectAll,
   onClearSelection,
   onComposeEmail,
+  onAddContact,
 }: MobileHeaderProps) {
   return (
     <header className="bg-white border-b border-slate-200 sticky top-0 z-50">
@@ -84,6 +86,14 @@ export default function MobileHeader({
               onClick={onSearchToggle}
             >
               <Search className="w-4 h-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="p-2 text-primary hover:bg-blue-50 rounded-full"
+              onClick={onAddContact}
+            >
+              <Plus className="w-4 h-4" />
             </Button>
           </div>
         </div>

@@ -89,6 +89,7 @@ export default function Home() {
         onSelectAll={handleSelectAll}
         onClearSelection={handleClearSelection}
         onComposeEmail={handleComposeEmail}
+        onAddContact={() => setShowAddModal(true)}
       />
 
       <main className="pb-20">
@@ -122,15 +123,7 @@ export default function Home() {
         </div>
       </main>
 
-      <div className="fixed bottom-20 right-4">
-        <Button
-          size="lg"
-          className="w-14 h-14 rounded-full bg-primary hover:bg-blue-700 shadow-lg"
-          onClick={() => setShowAddModal(true)}
-        >
-          <Plus className="w-6 h-6" />
-        </Button>
-      </div>
+
 
       <BottomNavigation />
 
