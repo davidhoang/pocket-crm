@@ -13,6 +13,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Plus, Users, Mail, Trash2 } from "lucide-react";
 import BottomNavigation from "@/components/bottom-navigation";
 import EmailComposerModal from "@/components/email-composer-modal";
+import logoPath from "@assets/visualelectric-1749342811885_1749342828607.png";
 
 export default function Lists() {
   const { toast } = useToast();
@@ -155,9 +156,11 @@ export default function Lists() {
         <div className="bg-white border-b border-slate-200 px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center">
-                <Users className="w-4 h-4 text-white" />
-              </div>
+              <img 
+                src={logoPath} 
+                alt="App Logo" 
+                className="w-8 h-8 rounded-full object-cover"
+              />
               <div>
                 <h1 className="font-semibold text-slate-800">Design CRM</h1>
                 <p className="text-sm text-slate-600">Loading...</p>
@@ -190,9 +193,11 @@ export default function Lists() {
       <div className="bg-white border-b border-slate-200 px-4 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center">
-              <Users className="w-4 h-4 text-white" />
-            </div>
+            <img 
+              src={logoPath} 
+              alt="App Logo" 
+              className="w-8 h-8 rounded-full object-cover"
+            />
             <div>
               <h1 className="text-slate-800 text-[18px] font-bold">Lists</h1>
               <p className="text-sm text-slate-600">{(lists as List[]).length} lists</p>

@@ -7,6 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import logoPath from "@assets/visualelectric-1749342811885_1749342828607.png";
 
 interface MobileHeaderProps {
   contactCount: number;
@@ -70,9 +71,11 @@ export default function MobileHeader({
       ) : (
         <div className="px-4 py-3 flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-              <div className="w-4 h-4 bg-white rounded-sm"></div>
-            </div>
+            <img 
+              src={logoPath} 
+              alt="App Logo" 
+              className="w-8 h-8 rounded-full object-cover"
+            />
             <div>
               <h1 className="text-lg font-semibold text-slate-800">Contacts</h1>
               <p className="text-xs text-slate-500">{contactCount} contacts</p>
