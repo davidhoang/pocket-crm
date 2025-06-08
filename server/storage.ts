@@ -107,10 +107,10 @@ export class DatabaseStorage implements IStorage {
     const allContacts = await db.select().from(contacts);
     const lowerQuery = query.toLowerCase();
     return allContacts.filter(contact =>
-      contact.firstName.toLowerCase().includes(lowerQuery) ||
-      contact.lastName.toLowerCase().includes(lowerQuery) ||
-      contact.role.toLowerCase().includes(lowerQuery) ||
-      contact.company.toLowerCase().includes(lowerQuery)
+      contact.firstName?.toLowerCase().includes(lowerQuery) ||
+      contact.lastName?.toLowerCase().includes(lowerQuery) ||
+      contact.role?.toLowerCase().includes(lowerQuery) ||
+      contact.company?.toLowerCase().includes(lowerQuery)
     );
   }
 

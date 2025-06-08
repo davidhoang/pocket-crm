@@ -40,7 +40,26 @@ export default function Home() {
 
   // Fetch contacts or search results
   const { data: contacts = [], isLoading, refetch } = useQuery<Contact[]>({
-    queryKey: searchQuery ? ["/api/contacts/search", { q: searchQuery }] : ["/api/contacts"],
+    queryKey: searchQuery ? ["/api/contacts/search", searchQuery] : ["/api/contacts"],
+    queryFn: async () => {
+      if (searchQuery) {
+        const response = await fetch(`/api/contacts/search?q=${encodeURIComponent(searchQuery)}`, {
+          credentials: "include",
+        });
+        if (!response.ok) {
+          throw new Error(`${response.status}: ${response.statusText}`);
+        }
+        return response.json();
+      } else {
+        const response = await fetch("/api/contacts", {
+          credentials: "include",
+        });
+        if (!response.ok) {
+          throw new Error(`${response.status}: ${response.statusText}`);
+        }
+        return response.json();
+      }
+    },
     enabled: isAuthenticated,
   });
 
