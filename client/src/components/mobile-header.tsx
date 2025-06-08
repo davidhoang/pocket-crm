@@ -74,7 +74,7 @@ export default function MobileHeader({
               <div className="w-4 h-4 bg-white rounded-sm"></div>
             </div>
             <div>
-              <h1 className="text-lg font-semibold text-slate-800">Design CRM</h1>
+              <h1 className="text-lg font-semibold text-slate-800">Contacts</h1>
               <p className="text-xs text-slate-500">{contactCount} contacts</p>
             </div>
           </div>
@@ -107,7 +107,6 @@ export default function MobileHeader({
           </div>
         </div>
       )}
-
       {searchVisible && (
         <div className="px-4 pb-3">
           <div className="relative">
