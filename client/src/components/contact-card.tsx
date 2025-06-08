@@ -68,7 +68,7 @@ export default function ContactCard({ contact, selected, onSelect, onRefetch, on
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
+    <div className="bg-white border-2 border-slate-200 rounded-lg p-4 shadow-sm">
       <div className="flex items-start space-x-3">
         <div className="flex-shrink-0 flex items-center h-12">
           <Checkbox
