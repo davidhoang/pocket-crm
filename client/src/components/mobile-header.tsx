@@ -88,9 +88,9 @@ export default function MobileHeader({
               <Search className="w-4 h-4" />
             </Button>
             <Button
-              variant="ghost"
+              variant="default"
               size="sm"
-              className="p-2 text-primary hover:bg-blue-50 rounded-full"
+              className="p-2 bg-black text-white hover:bg-slate-800 rounded-full"
               onClick={onAddContact}
             >
               <Plus className="w-4 h-4" />
