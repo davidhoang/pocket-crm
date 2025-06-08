@@ -21,9 +21,10 @@ interface ContactCardProps {
   selected: boolean;
   onSelect: (selected: boolean) => void;
   onRefetch: () => void;
+  onContactClick: (contact: Contact) => void;
 }
 
-export default function ContactCard({ contact, selected, onSelect, onRefetch }: ContactCardProps) {
+export default function ContactCard({ contact, selected, onSelect, onRefetch, onContactClick }: ContactCardProps) {
   const { toast } = useToast();
   const [isEditOpen, setIsEditOpen] = useState(false);
 
@@ -73,74 +74,58 @@ export default function ContactCard({ contact, selected, onSelect, onRefetch }: 
           <Checkbox
             checked={selected}
             onCheckedChange={(checked) => onSelect(!!checked)}
+            onClick={(e) => e.stopPropagation()}
           />
         </div>
-        <div className="flex-shrink-0">
-          <Avatar className="w-12 h-12">
-            <AvatarImage 
-              src={contact.profilePhoto || undefined} 
-              alt={`${contact.firstName} ${contact.lastName}`}
-            />
-            <AvatarFallback className="bg-primary text-white font-medium">
-              {getInitials(contact.firstName, contact.lastName)}
-            </AvatarFallback>
-          </Avatar>
-        </div>
-        <div className="flex-grow min-w-0">
-          <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-slate-800 truncate">
-              {contact.firstName} {contact.lastName}
-            </h3>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="p-1 text-slate-400 hover:text-slate-600">
-                  <MoreHorizontal className="w-4 h-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setIsEditOpen(true)}>
-                  Edit
-                </DropdownMenuItem>
-                <DropdownMenuItem 
-                  onClick={handleDelete}
-                  className="text-red-600 focus:text-red-600"
-                >
-                  Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-          <p className="text-sm text-slate-600 mt-1">{contact.role}</p>
-          <p className="text-sm text-slate-500">{contact.company}</p>
-          <div className="flex items-center space-x-4 mt-2">
-            {contact.linkedin && (
-              <a 
-                href={contact.linkedin} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-primary text-xs hover:underline flex items-center"
-              >
-                LinkedIn
-                <ExternalLink className="w-3 h-3 ml-1" />
-              </a>
-            )}
-            {contact.portfolio && (
-              <a 
-                href={contact.portfolio} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-primary text-xs hover:underline flex items-center"
-              >
-                Portfolio
-                <ExternalLink className="w-3 h-3 ml-1" />
-              </a>
-            )}
-          </div>
-          {contact.notes && (
-            <div className="mt-2 text-xs text-slate-500 bg-slate-50 rounded p-2">
-              {contact.notes}
+        <div 
+          className="flex-1 cursor-pointer" 
+          onClick={() => onContactClick(contact)}
+        >
+          <div className="flex items-start space-x-3">
+            <div className="flex-shrink-0">
+              <Avatar className="w-12 h-12">
+                <AvatarImage 
+                  src={contact.profilePhoto || undefined} 
+                  alt={`${contact.firstName} ${contact.lastName}`}
+                />
+                <AvatarFallback className="bg-primary text-white font-medium">
+                  {getInitials(contact.firstName, contact.lastName)}
+                </AvatarFallback>
+              </Avatar>
             </div>
-          )}
+            <div className="flex-grow min-w-0">
+              <div className="flex items-center justify-between">
+                <h3 className="font-semibold text-slate-800 truncate">
+                  {contact.firstName} {contact.lastName}
+                </h3>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="p-1 text-slate-400 hover:text-slate-600"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <MoreHorizontal className="w-4 h-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={() => setIsEditOpen(true)}>
+                      Edit
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      onClick={handleDelete}
+                      className="text-red-600 focus:text-red-600"
+                    >
+                      Delete
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+              <p className="text-sm text-slate-600 mt-1">{contact.role}</p>
+              <p className="text-sm text-slate-500">{contact.company}</p>
+            </div>
+          </div>
         </div>
       </div>
       

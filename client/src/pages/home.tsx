@@ -5,6 +5,7 @@ import MobileHeader from "@/components/mobile-header";
 import ContactCard from "@/components/contact-card";
 import AddContactModal from "@/components/add-contact-modal";
 import EmailComposerModal from "@/components/email-composer-modal";
+import ContactDetailModal from "@/components/contact-detail-modal";
 import BottomNavigation from "@/components/bottom-navigation";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -19,6 +20,8 @@ export default function Home() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [searchVisible, setSearchVisible] = useState(false);
+  const [selectedContactForDetail, setSelectedContactForDetail] = useState<Contact | null>(null);
+  const [showContactDetail, setShowContactDetail] = useState(false);
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -67,6 +70,11 @@ export default function Home() {
     }
   };
 
+  const handleContactClick = (contact: Contact) => {
+    setSelectedContactForDetail(contact);
+    setShowContactDetail(true);
+  };
+
   const selectedContactsData = contacts.filter(c => selectedContacts.includes(c.id));
 
   return (
@@ -107,6 +115,7 @@ export default function Home() {
                 selected={selectedContacts.includes(contact.id)}
                 onSelect={(selected) => handleContactSelect(contact.id, selected)}
                 onRefetch={refetch}
+                onContactClick={handleContactClick}
               />
             ))
           )}
