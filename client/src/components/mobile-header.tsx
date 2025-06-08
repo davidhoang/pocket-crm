@@ -90,7 +90,7 @@ export default function MobileHeader({
             <Button
               variant="default"
               size="sm"
-              className="p-2 bg-black text-white hover:bg-slate-800 rounded-full"
+              className="w-8 h-8 p-0 bg-black text-white hover:bg-slate-800 rounded-full flex items-center justify-center"
               onClick={onAddContact}
             >
               <Plus className="w-4 h-4" />
