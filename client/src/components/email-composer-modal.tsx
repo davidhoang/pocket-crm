@@ -37,7 +37,7 @@ export default function EmailComposerModal({
   const { toast } = useToast();
   const [to, setTo] = useState("");
   const [from, setFrom] = useState("");
-  const [subject, setSubject] = useState(`${listName} - Curated Design Talent`);
+  const [subject, setSubject] = useState("Designer recommendations");
   const [message, setMessage] = useState("Hi there,\n\nI've put together a curated list of exceptional design talent that might be a great fit for your team. Please find the details below.\n\nBest regards");
 
   const sendEmailMutation = useMutation({
@@ -93,7 +93,7 @@ export default function EmailComposerModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md mx-auto h-5/6 flex flex-col">
+      <DialogContent className="max-w-md mx-auto h-screen max-h-screen flex flex-col rounded-none sm:rounded-lg sm:h-5/6 sm:max-h-[90vh]">
         <DialogHeader>
           <DialogTitle>Compose Email</DialogTitle>
           <p className="text-sm text-slate-500">
@@ -148,7 +148,7 @@ export default function EmailComposerModal({
           </div>
 
           <div>
-            <Label>Selected Contacts</Label>
+            <Label>Contacts</Label>
             <div className="mt-2 space-y-2 max-h-32 overflow-y-auto bg-slate-50 rounded-lg p-3">
               {selectedContacts.map((contact) => {
                 const getInitials = (firstName: string, lastName: string) => {
